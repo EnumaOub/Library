@@ -3,7 +3,6 @@
 function Library() {
     let myLibrary = [];
 
-
     // Generate div with button allowing to add some of the books
     const genSomeBook = function() {
         const container = document.getElementById("container-lib");
@@ -184,11 +183,19 @@ const BookCreator = (function(){
 
 
 function initLibrary() {
+    // Generation of the library
+    lib = Library();
+    lib.getStored();
+
+    // Get form dialog id
+    const form = document.getElementById("form-show");
+
     // Give the form its function when submitting.
     const BookForm = document.getElementById("book-info");
     BookForm.addEventListener("submit", function(event){
         event.preventDefault()
         lib.addBook(BookCreator.getBook())
+        form.close();
     });
 
     // Give the delete all button its function.
@@ -197,13 +204,19 @@ function initLibrary() {
         lib.deleteAll()
     });
 
+    const Add_btn = document.getElementById("add-elem");
+    Add_btn.addEventListener("click", function(event){
+        form.showModal();
+    });
+
+    const close_form_btn = document.getElementById("close-form");
+    close_form_btn.addEventListener("click", function(event){
+        form.close();
+    });
+
 }
 
 let lib;
-
-// Generation of the library
-lib = Library();
-lib.getStored();
 
 
 
