@@ -3,21 +3,29 @@
 function Library() {
     let myLibrary = [];
 
-
+    //Delete all data
+    const deleteAll = function() {
+        localStorage.removeItem("lib");
+        myLibrary = [];
+        updateLibrary();
+    }
 
     // Get all data stored locally
     const getStored = function() {
-        const lib_hist = JSON.parse(localStorage.getItem('lib'));
-        for (const book of lib_hist) {
-            addBook(book);
+        if (localStorage.getItem('lib')) {
+            const lib_hist = JSON.parse(localStorage.getItem('lib'));
+            for (const book of lib_hist) {
+                addBook(book);
+            }
         }
+        
     }
 
     // Get books informations
     const getBookInfo = function() {
         let book_read = 0;
         let book_unread = 0;
-        const book_tot = myLibrary.length + 1;
+        const book_tot = myLibrary.length;
         for (const book of myLibrary) {
             if (book.read) {
                 book_read += 1;
@@ -29,12 +37,17 @@ function Library() {
         return {book_read, book_unread, book_tot};
     }
 
-    // Add a book to our library
-    const addBook = function(book) {
-        myLibrary.push(book)
+    // Update general display and the local memory
+    const updateLibrary = function() {
         displayLibrary();
         updateHeader();
         localStorage.setItem("lib", JSON.stringify(myLibrary));
+    }
+
+    // Add a book to our library
+    const addBook = function(book) {
+        myLibrary.push(book);
+        updateLibrary();
     }
 
     // Invert boolean of read
@@ -61,15 +74,14 @@ function Library() {
         btn_read.textContent = "read ?"
         btn_read.onclick = function() {
             changeRead(book_cont, pos);
-            localStorage.setItem("lib", JSON.stringify(myLibrary));
+            updateLibrary();
         };
 
         const btn_delete = document.createElement("button");
         btn_delete.textContent = "del ?"
         btn_delete.onclick = function() {
             myLibrary.splice(pos, 1);
-            displayLibrary()
-            localStorage.setItem("lib", JSON.stringify(myLibrary));
+            updateLibrary();
         }
 
         book_cont.appendChild(btn_delete);
@@ -100,7 +112,7 @@ function Library() {
         }
     }
 
-    return {addBook, getBookInfo, getStored};
+    return {addBook, getBookInfo, getStored, deleteAll};
 
 }
 
@@ -140,6 +152,21 @@ const BookCreator = (function(){
 
 function genSomeBook() {
     const container = document.getElementById("container-lib");
+    if (!(container.firstChild)) {
+        const library_cont = document.getElementById("library");
+        const div = document.createElement("div");
+        const btn = document.createElement("button");
+        div.id = "gen-data-rd";
+        div.textContent = "You can create your library or use the button below to generate some examples:";
+        btn.textContent = "Generate Data ?";
+        BookForm.addEventListener("submit", function(event){
+            for (const book_ex of BookCreator.GetGeneralBooks()) {
+                lib.addBook(book_ex);
+            }
+        });
+        div.appendChild(btn);
+        library_cont.appendChild(div);
+    }
 
 }
 
@@ -153,8 +180,8 @@ function initLibrary() {
 
     // Give the delete all button its function.
     const Delete_btn = document.getElementById("delete-all");
-    BookForm.addEventListener("submit", function(event){
-        lib.addBook(BookCreator.getBook())
+    Delete_btn.addEventListener("click", function(event){
+        lib.deleteAll()
     });
 
 
