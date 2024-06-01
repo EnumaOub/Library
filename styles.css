@@ -1,11 +1,59 @@
 * {
     box-sizing: border-box;
+    margin: 0;
 }
 
 :root {
     --back-shelves: #f6f3e9;
+    --shadow-box: rgba(0,0,0,.5)
 }
 
 body {
     font-family: Superclarendon, 'Bookman Old Style', 'URW Bookman', 'URW Bookman L', 'Georgia Pro', Georgia, serif; 
+}
+
+/* Header parameters */
+
+header {
+    position: sticky;
+    top: 0;
+    left: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 3rem;
+    border-bottom: 1px solid rgb(0,0,0);
+    box-shadow: 1rem 0 1rem var(--shadow-box);
+}
+
+header h1 {
+    font-size: 3rem;
+    margin-top: 0.5rem;
+    margin-left: 0.5rem;
+}
+
+header .icon {
+    width: 3rem;
+}
+
+header #title-page {
+    display: flex
+}
+
+header .result {
+    flex: 1;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    font-size: 2rem;
+    font-weight: 400;
+}
+
+header #delete-all {
+    font-size: 1.5rem;
+    background-color: red;
+    color: #f6f3e9;
+    padding: 0.4rem;
+    border-radius: 0.8rem;
+    margin-bottom: 0.4rem;
 }
