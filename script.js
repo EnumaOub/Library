@@ -11,7 +11,7 @@ function Library() {
             const div = document.createElement("div");
             const btn = document.createElement("button");
             div.id = "gen-data-rd";
-            div.textContent = "You can create your library or use the button below to generate some examples:";
+            div.textContent = "You can create your library by using the button '+ Add Book' or use the button below to generate some examples:";
             btn.textContent = "Generate Data ?";
             btn.addEventListener("click", function(event){
                 for (const book_ex of BookCreator.GetGeneralBooks()) {
@@ -90,6 +90,8 @@ function Library() {
     //Generate the cards containing the book information
     const createCardBook = function(book, pos) {
         const book_cont = document.createElement("div");
+        const btn_cont = document.createElement("div");
+        btn_cont.id = "btn-res";
         const id = `book_${pos}`;
         const HTMLString = `
                     <h1>${book.title}</h1>
@@ -102,20 +104,24 @@ function Library() {
 
         const btn_read = document.createElement("button");
         btn_read.textContent = "read ?"
+        btn_read.classList.add("read-btn");
         btn_read.onclick = function() {
             changeRead(book_cont, pos);
             updateLibrary();
         };
 
         const btn_delete = document.createElement("button");
-        btn_delete.textContent = "del ?"
+        btn_delete.textContent = "Del ?";
+        btn_delete.classList.add("delete-btn");
         btn_delete.onclick = function() {
             myLibrary.splice(pos, 1);
             updateLibrary();
         }
 
-        book_cont.appendChild(btn_delete);
-        book_cont.appendChild(btn_read);
+        btn_cont.appendChild(btn_delete);
+        btn_cont.appendChild(btn_read);
+
+        book_cont.appendChild(btn_cont);
         
         return book_cont;
     } 
@@ -164,15 +170,35 @@ const BookCreator = (function(){
         const pages = document.getElementById("pages");
         const read = document.getElementById("read");
         
-        return new Book(title.value, author.value, pages.value, read.checked);
+        const book = new Book(title.value, author.value, pages.value, read.checked);
+        clearForm(title, author, pages, read);
+        return book
+    }
+
+    function clearForm(title, author, pages, read) {
+        title.value = "";
+        author.value = "";
+        pages.value = "";
+        read.checked = false;
+
+
     }
 
     function GetGeneralBooks() {
         let book_examples = [];
 
         book_examples.push(new Book("The Hobbit", "J.R.R. Tolkien", "295", false));
-        book_examples.push(new Book("MOL", "Domagoj Kurmaić", "644", true));
+        book_examples.push(new Book("Mother of Learning", "Domagoj Kurmaić", "644", true));
         book_examples.push(new Book("The Final Empire", "Brandon Sanderson", "541", true));
+        book_examples.push(new Book("Eragon", "Christopher Paolini", "503", false));
+        book_examples.push(new Book("A Darker Shade of Magic", "V.E. Schwab", "400", true));
+        book_examples.push(new Book("Leviathan Wakes", "James S.A. Corey", "592", true));
+        book_examples.push(new Book("Foundryside", "Robert Jackson Bennett", "501", true));
+        book_examples.push(new Book("The Name of the Wind", "Patrick Rothfuss", "662", true));
+        book_examples.push(new Book("The Alloy of Law", "Brandon Sanderson", "332", false));
+        book_examples.push(new Book("Storm Front", "Jim Butcher", "355", true));
+        book_examples.push(new Book("The Thousand Names", "Django Wexler", "513", false));
+        book_examples.push(new Book("Sabriel", "Garth Nix", "491", false));
 
         return book_examples;
     }
