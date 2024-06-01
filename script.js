@@ -3,6 +3,35 @@
 function Library() {
     let myLibrary = [];
 
+
+    // Generate div with button allowing to add some of the books
+    const genSomeBook = function() {
+        const container = document.getElementById("container-lib");
+        if (!(container.firstChild)) {
+            const library_cont = document.getElementById("library");
+            const div = document.createElement("div");
+            const btn = document.createElement("button");
+            div.id = "gen-data-rd";
+            div.textContent = "You can create your library or use the button below to generate some examples:";
+            btn.textContent = "Generate Data ?";
+            btn.addEventListener("click", function(event){
+                for (const book_ex of BookCreator.GetGeneralBooks()) {
+                    lib.addBook(book_ex);
+                }
+            });
+            div.appendChild(btn);
+            library_cont.appendChild(div);
+        }
+        else {
+            if (document.getElementById("gen-data-rd")) {
+                document.getElementById("gen-data-rd").remove();
+            }
+            
+
+        }
+
+    }
+
     //Delete all data
     const deleteAll = function() {
         localStorage.removeItem("lib");
@@ -17,6 +46,7 @@ function Library() {
             for (const book of lib_hist) {
                 addBook(book);
             }
+            updateLibrary();
         }
         
     }
@@ -42,6 +72,7 @@ function Library() {
         displayLibrary();
         updateHeader();
         localStorage.setItem("lib", JSON.stringify(myLibrary));
+        genSomeBook();
     }
 
     // Add a book to our library
@@ -150,25 +181,7 @@ const BookCreator = (function(){
     return {getBook, GetGeneralBooks};
 })();
 
-function genSomeBook() {
-    const container = document.getElementById("container-lib");
-    if (!(container.firstChild)) {
-        const library_cont = document.getElementById("library");
-        const div = document.createElement("div");
-        const btn = document.createElement("button");
-        div.id = "gen-data-rd";
-        div.textContent = "You can create your library or use the button below to generate some examples:";
-        btn.textContent = "Generate Data ?";
-        BookForm.addEventListener("submit", function(event){
-            for (const book_ex of BookCreator.GetGeneralBooks()) {
-                lib.addBook(book_ex);
-            }
-        });
-        div.appendChild(btn);
-        library_cont.appendChild(div);
-    }
 
-}
 
 function initLibrary() {
     // Give the form its function when submitting.
@@ -183,8 +196,6 @@ function initLibrary() {
     Delete_btn.addEventListener("click", function(event){
         lib.deleteAll()
     });
-
-
 
 }
 
