@@ -45,8 +45,9 @@ function Library() {
             for (const book of lib_hist) {
                 addBook(book);
             }
-            updateLibrary();
+            
         }
+        updateLibrary();
         
     }
 
