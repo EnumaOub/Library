@@ -57,7 +57,7 @@ function Library() {
         let book_unread = 0;
         const book_tot = myLibrary.length;
         for (const book of myLibrary) {
-            if (book.read) {
+            if (book.getReadStatus()) {
                 book_read += 1;
             }
             else {
@@ -83,8 +83,8 @@ function Library() {
 
     // Invert boolean of read
     const changeRead = function(book_cont, pos) {
-        myLibrary[pos].read = !myLibrary[pos].read
-        book_cont.className = `book ${myLibrary[pos].read}`;
+        myLibrary[pos].setReadStatus(!myLibrary[pos].getReadStatus());
+        book_cont.className = `book ${myLibrary[pos].getReadStatus()}`;
     }
 
 
@@ -101,7 +101,7 @@ function Library() {
                         `;
         book_cont.innerHTML = HTMLString;
         book_cont.id = id;
-        book_cont.className = `book ${book.read}`;
+        book_cont.className = `book ${book.getReadStatus()}`;
 
         const btn_read = document.createElement("button");
         btn_read.textContent = "read ?"
@@ -154,11 +154,25 @@ function Library() {
 }
 
 // Constructor for the Book object
-function Book(title, author, pages, read) {
-    this.title = title;
-    this.author = author;
-    this.pages = pages;
-    this.read = read;
+class Book {
+    _read = false;
+
+    constructor(title, author, pages) {
+        this.title = title;
+        this.author = author;
+        this.pages = pages;
+    }
+
+    setReadStatus(value) {
+        if (typeof(value) == "boolean") {
+            this._read = value;
+        }
+    }
+
+    getReadStatus() {
+        return this._read;
+    }
+    
 }
 
 
@@ -171,7 +185,8 @@ const BookCreator = (function(){
         const pages = document.getElementById("pages");
         const read = document.getElementById("read");
         
-        const book = new Book(title.value, author.value, pages.value, read.checked);
+        let book = new Book(title.value, author.value, pages.value);
+        book.setReadStatus = read.checked;
         clearForm(title, author, pages, read);
         return book
     }
@@ -188,18 +203,42 @@ const BookCreator = (function(){
     function GetGeneralBooks() {
         let book_examples = [];
 
-        book_examples.push(new Book("The Hobbit", "J.R.R. Tolkien", "295", false));
-        book_examples.push(new Book("Mother of Learning", "Domagoj Kurmaić", "644", true));
-        book_examples.push(new Book("The Final Empire", "Brandon Sanderson", "541", true));
-        book_examples.push(new Book("Eragon", "Christopher Paolini", "503", false));
-        book_examples.push(new Book("A Darker Shade of Magic", "V.E. Schwab", "400", true));
-        book_examples.push(new Book("Leviathan Wakes", "James S.A. Corey", "592", true));
-        book_examples.push(new Book("Foundryside", "Robert Jackson Bennett", "501", true));
-        book_examples.push(new Book("The Name of the Wind", "Patrick Rothfuss", "662", true));
-        book_examples.push(new Book("The Alloy of Law", "Brandon Sanderson", "332", false));
-        book_examples.push(new Book("Storm Front", "Jim Butcher", "355", true));
-        book_examples.push(new Book("The Thousand Names", "Django Wexler", "513", false));
-        book_examples.push(new Book("Sabriel", "Garth Nix", "491", false));
+        let book = new Book("The Hobbit", "J.R.R. Tolkien", "295");
+        book.setReadStatus(false);
+        book_examples.push(book);
+        book = new Book("Mother of Learning", "Domagoj Kurmaić", "644");
+        book.setReadStatus(true);
+        book_examples.push(book);
+        book = new Book("The Final Empire", "Brandon Sanderson", "541");
+        book.setReadStatus(true);
+        book_examples.push(book);
+        book = new Book("Eragon", "Christopher Paolini", "503", "644");
+        book.setReadStatus(false);
+        book_examples.push(book);
+        book = new Book("A Darker Shade of Magic", "V.E. Schwab", "400");
+        book.setReadStatus(true);
+        book_examples.push(book);
+        book = new Book("Leviathan Wakes", "James S.A. Corey", "592");
+        book.setReadStatus(true);
+        book_examples.push(book);
+        book = new Book("Foundryside", "Robert Jackson Bennett", "501");
+        book.setReadStatus(true);
+        book_examples.push(book);
+        book = new Book("The Name of the Wind", "Patrick Rothfuss", "662");
+        book.setReadStatus(true);
+        book_examples.push(book);
+        book = new Book("The Alloy of Law", "Brandon Sanderson", "332");
+        book.setReadStatus(false);
+        book_examples.push(book);
+        book = new Book("Storm Front", "Jim Butcher", "355", "501");
+        book.setReadStatus(true);
+        book_examples.push(book);
+        book = new Book("The Thousand Names", "Django Wexler", "513");
+        book.setReadStatus(false);
+        book_examples.push(book);
+        book = new Book("Sabriel", "Garth Nix", "491");
+        book.setReadStatus(false);
+        book_examples.push(book);
 
         return book_examples;
     }

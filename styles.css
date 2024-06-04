@@ -136,6 +136,7 @@ main #add-elem {
     display: flex;
     flex-direction: column;
     align-items: center;
+    max-width: 60rem;
     padding: 2rem;
     margin: auto;
     margin-bottom: 60dvh;
