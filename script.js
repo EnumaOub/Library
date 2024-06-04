@@ -43,7 +43,9 @@ function Library() {
         if (localStorage.getItem('lib')) {
             const lib_hist = JSON.parse(localStorage.getItem('lib'));
             for (const book of lib_hist) {
-                addBook(book);
+                const book_fin = new Book(book.title, book.pages, book.author);
+                book_fin.setReadStatus(book._read);
+                addBook(book_fin);
             }
             
         }
@@ -186,7 +188,7 @@ const BookCreator = (function(){
         const read = document.getElementById("read");
         
         let book = new Book(title.value, author.value, pages.value);
-        book.setReadStatus = read.checked;
+        book.setReadStatus(read.checked);
         clearForm(title, author, pages, read);
         return book
     }
